@@ -1,0 +1,867 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="fb:app_id" content="668055086954771" />
+  <meta property="og:title" content="{{ q.question }} -Thinkpolls" />
+  <meta property="og:site_name" content="Thinkpolls" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thinkpolls.com/{{ q.poll_url }}" />
+  <meta property="og:description" content="Vote Now! {% for option in q_options %} [{{option}}]{% endfor %}" />
+  <meta name="title" content="{{ q.question }} -Thinkpolls" />
+  <meta name="type" content="website" />
+  <meta name="url" content="{{ q.poll_url }}" />
+  <meta name="description" content="Vote Now! {% for option in q_options %} [{{option}}]{% endfor %}" />
+  <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg.jpg" />
+  <meta property="og:image:type" content="image/jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg-small.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="400" />
+  <meta property="og:image:height" content="400" />
+  <meta name="og:locale" content="en_US" />
+  <title>{{q.question }} -Thinkpolls</title>
+
+  <link rel="shortcut icon" href="{% static 'poll_detail/images/favicon.svg' %}" />
+
+  <script>
+    var url = "{{random_url}}";
+    var end_point = "https://www.thinkpolls.com/" + url + "/api/poll_details";
+    console.log(end_point);
+  </script>
+
+  <style>
+    body,
+    html {
+      padding: 0px;
+      margin: 0px;
+      background-color: white;
+    }
+
+    :root {
+
+        {
+        % if 'blue'in q.theme_color %
+      }
+
+      --main-color: #3948f2;
+      --sec1-color: #E4F1FE;
+      --sec2-color: #4361E9;
+
+        {
+        % elif 'red'in q.theme_color %
+      }
+
+      --main-color: #F64747;
+      --sec1-color: #FDE4EB;
+      --sec2-color: #FF8282;
+
+        {
+        % elif 'orange'in q.theme_color %
+      }
+
+      --main-color: #F15A22;
+      --sec1-color: #FDE3A7;
+      --sec2-color: #F68C66;
+
+        {
+        % elif 'green'in q.theme_color %
+      }
+
+      --main-color: #00B16A;
+      --sec1-color: #C8F7C5;
+      --sec2-color: #85CE94;
+
+        {
+        % elif 'yellow'in q.theme_color %
+      }
+
+      --main-color: #F7CA18;
+      --sec1-color: #FFFFCC;
+      --sec2-color: #FFE16A;
+
+        {
+        % elif 'purple'in q.theme_color %
+      }
+
+      --main-color: #8C14FC;
+      --sec1-color: #fadcff;
+      --sec2-color:#bd8fff;
+
+        {
+        % elif 'black'in q.theme_color %
+      }
+
+      --main-color: #2e3131;
+      --sec1-color: #dadfe1;
+      --sec2-color: #6c7a89;
+
+
+        {
+        % elif 'default'in q.theme_color %
+      }
+
+      --main-color: rgb(250, 250, 250);
+      --no-border:none;
+      --sec1-color: #fcfcfc;
+      --sec2-color: #E7EBFF;
+      --q-color: rgb(22, 22, 22);
+      --border: 1.8px solid #6d6d6d;
+      --border-color:#6d6d6d;
+      --border-style: solid;
+      --border-width-label: 1.8px 1.8px 1.8px 0px;
+      --border-width-rbo: 1.8px 0px 1.8px 1.8px;
+      --q-color:black;
+
+        {
+        % else %
+      }
+
+      --main-color: #2e3131;
+      --sec1-color: #dadfe1;
+      --sec2-color: #6c7a89;
+
+        {
+        % endif %
+      }
+
+        {
+        % if 'default'not in q.theme_color %
+      }
+
+      --q-color:white;
+
+        {
+        % endif %
+      }
+    }
+
+    .wrapper {
+      width: 100%;
+      height: auto;
+      margin: 0px;
+      padding: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    /* header*/
+    .header {
+      top: 0px;
+      position: absolute;
+      width: 100%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-left {
+      width: 50%;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .header-right {
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .logo-block {
+      margin-left: 45px;
+      text-decoration: none;
+      align-self: center;
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      font-family: "Quicksand", sans-serif;
+    }
+
+    .logo-block div {
+      text-decoration: none;
+      padding-left: 10px;
+      color: rgb(22, 22, 22);
+    }
+
+    .username {
+      position: relative;
+      padding: 7px 14px;
+      border-radius: 30px;
+      color: rgb(41, 80, 255);
+      margin-right: 50px;
+      box-sizing: border-box;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      background-color: #e7ebff;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .nav-list {
+      width: 100%;
+      position: absolute;
+      padding: 7px 30px 7px 10px;
+      border-radius: 20px;
+      top: 0px;
+      right: 0px;
+      background-color: #e7ebff;
+      color: #2950ff;
+      display: flex;
+      visibility: hidden;
+      opacity: 0;
+      justify-content: space-evenly;
+      align-items: flex-end;
+      flex-direction: column;
+      transition: 180ms all ease;
+    }
+
+    .nav-list div {
+      padding: 0px;
+    }
+
+    .nav-list a {
+      padding: 3px 0px;
+      text-decoration: none;
+      color: #2950ff;
+    }
+
+
+    .username:hover .nav-list {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .username svg {
+      fill: rgb(41, 80, 255);
+      padding-left: 2px;
+    }
+
+    .login-btn {
+      cursor: pointer;
+      margin-right: 50px;
+      font-family: "Roboto", sans-serif;
+      text-decoration: none;
+      padding: 8px 13px;
+      border-radius: 6px;
+      background-color: rgb(19, 19, 19);
+      color: white;
+    }
+
+
+    /* MODAL*/
+    .modal-bg {
+      top: 0px;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .modal-bg .modal-block {
+      position: relative;
+      width: 380px;
+      height: 380px;
+      background-color: white;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .embed-copy-block {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(251, 251, 251);
+      justify-content: space-evenly;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .embed-copy-block .embed-title {
+      font-family: "Roboto", sans-serif;
+      font-size: 19px;
+
+    }
+
+    .embed-copy-block textarea {
+      resize: none;
+      border: 2px solid rgb(129, 129, 129);
+      width: 280px;
+      border-radius: 5px;
+      height: 200px;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .embed-copy-block button {
+      width: 280px;
+      padding: 13px 0px;
+      background-color: #252525;
+      color: #e6e6e6;
+      font-family: "Roboto", sans-serif;
+      font-size: 21px;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+    }
+
+    .modal-block .modal-section {
+      width: 100%;
+      height: calc(100% / 6);
+      background-color: #ffffff;
+      box-sizing: border-box;
+      border-bottom: 0.5px solid rgb(255, 255, 255);
+      cursor: pointer;
+    }
+
+    .modal-block .modal-section:hover {
+      background-color: #f3f3f3;
+    }
+
+    .modal-block .modal-section .modal-block-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .share-icons {
+      margin-left: 40px;
+    }
+
+    #embed-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -22px -19px;
+      width: 44px;
+      height: 43px;
+
+    }
+
+    .modal-text {
+      margin-left: 40px;
+      font-size: 16px;
+      font-family: "Roboto", sans-serif;
+      color: #181818;
+    }
+
+    #copylink-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -76px -19px;
+      width: 43px;
+      height: 43px;
+
+    }
+
+    #fb-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -147px -18px;
+      width: 44px;
+      height: 44px;
+
+    }
+
+    #twitter-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -215px -18px;
+      width: 44px;
+      height: 44px;
+
+    }
+
+    #whatsapp-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -283px -18px;
+      width: 44px;
+      height: 44px;
+
+    }
+
+    #reddit-icon {
+      background: url("{%static 'poll_detail/images/social_icons2.png' %}") no-repeat -361px -18px;
+      width: 44px;
+      height: 44px;
+
+    }
+
+    /* END OF MODAL*/
+
+    .poll-block {
+      margin: 80px 0px 20px 0px;
+      display: flex;
+      flex-direction: column;
+      width: 650px;
+      border: 1.8px solid #6d6d6d;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .madewithlove-block {
+      display: none;
+    }
+
+    .site-nav-block {
+      display: none;
+    }
+
+    .question-block {
+      width: 100%;
+      color: var(--q-color);
+      background-color: var(--main-color);
+      padding: 30px 35px 25px 30px;
+      box-sizing: border-box;
+      font-size: 28px;
+      line-height: 35px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .poll-option-wrapper {
+      position: relative;
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+
+    }
+
+    .poll-option-wrapper .form-block {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 40px 40px 40px 40px;
+      background-color: #ffffff;
+    }
+
+    .poll-option-wrapper .form-block label {
+      position: relative;
+      width: 90%;
+      box-sizing: border-box;
+      padding: 18px 18px;
+      line-height: 28px;
+      background-color: var(--sec1-color);
+      border-right: none;
+      border-radius: 15px 0px 0px 15px;
+      font-size: 20px;
+      font-family: "Poppins", sans-serif;
+
+        {
+        % if 'default'in q.theme_color %
+      }
+
+      color:rgb(9, 54, 255);
+
+        {
+        % else %
+      }
+
+      color: black;
+
+        {
+        % endif %
+      }
+
+      z-index: 1;
+    }
+
+    .label-wrapper {
+      position: relative;
+      margin-top: 25px;
+      display: flex;
+      width: 85%;
+      align-items: stretch;
+    }
+
+    .radio-block {
+      position: relative;
+      font-size: 22px;
+      font-family: "Roboto", sans-serif;
+      background-color: var(--sec1-color);
+      ;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 64px;
+      color: black;
+      border-radius: 0px 15px 15px 0px;
+    }
+
+    .radio-block span {
+      font-size: 15px;
+    }
+
+    .result-votes {
+      position: absolute;
+      display: flex;
+      top: 100%;
+      width: auto;
+      justify-content: space-between;
+      color: rgb(184, 184, 184);
+    }
+
+    .result-votes div {
+      font-size: 12px;
+      padding-right: 4px;
+    }
+
+    .result-votes span {
+      font-size: 11px;
+
+    }
+
+    .option {
+      margin-top: 0px;
+    }
+
+    .space-bar {
+      height: 25px;
+      width: 100%;
+    }
+
+    .label-background {
+      top: 0px;
+      left: 0px;
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      background-color: var(--sec2-color);
+      border-radius: 15px;
+      z-index: -1;
+    }
+
+    /* .submit-button-wrapper {
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+            }
+            .poll-submit-button {
+              display: flex;
+              align-items: center;
+              outline: none;
+              cursor: pointer;
+              font-family: "Montserrat", sans-serif;
+              font-size: 22px;
+              border: none;
+              border-radius: 10px;
+              padding: 10px 24px;
+              background-color:  var(  --main-color);;
+              color:var( --q-color);
+              margin: 30px 0px;
+            }
+            .poll-submit-button img {
+              padding-left: 10px;
+            }*/
+    .sbt-block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      width: 85%;
+      margin: 15px auto 5px auto;
+    }
+
+    #total-votes-block {
+      font-size: 26px;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      align-items: center;
+    }
+
+    #total-votes-block span {
+      padding-left: 4px;
+      font-size: 16px;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .sbt-block a {
+      text-decoration: none;
+      font-family: "Roboto", sans-serif;
+      font-size: 21px;
+      border: var(--border);
+      border-radius: 7px;
+      padding: 9px 16px;
+      background-color: var(--main-color);
+      color: var(--q-color);
+      margin: 25px 0px 25px auto;
+    }
+
+    .sbt-block button {
+      outline: none;
+      cursor: pointer;
+      font-family: "Roboto", sans-serif;
+      font-size: 21px;
+      border: var(--border);
+      border-radius: 7px;
+      padding: 9px 16px;
+      background-color: var(--main-color);
+      color: var(--q-color);
+      margin: 25px 0px 25px 25px;
+    }
+
+    @media(max-width:480px) {
+
+      body,
+      html {
+        background-color: #202020;
+      }
+
+      .wrapper {
+        background-color: #ffffff;
+      }
+
+      .header {
+        display: none;
+      }
+
+      .poll-block {
+        margin: 0px;
+        width: 100%;
+        border: none;
+        border-radius: 0px;
+
+      }
+
+      .question-block {
+        font-size: 30px;
+        line-height: 35px;
+        padding: 40px 35px 40px 30px;
+      }
+
+      .poll-option-wrapper .form-block label {
+        line-height: 28px;
+        font-size: 22px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .sbt-block button {
+        margin: 25px 0px 25px 20px;
+      }
+
+      .modal-bg .modal-block {
+        width: 88%;
+      }
+
+      .share-icons {
+        margin-left: 20px;
+      }
+
+      .madewithlove-block {
+        margin-top: 10px;
+        margin-bottom: 7px;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+        font-size: 15px;
+        padding: 5px;
+        color: rgb(53, 53, 53);
+      }
+
+      .madewithlove-block #love-svg {
+        padding: 0px 3px;
+        width: 25px;
+        height: 25px;
+      }
+
+      .madewithlove-block #thinkpolls-svg {
+        padding-left: 10px;
+        width: 22px;
+        height: 22px;
+      }
+
+      .site-nav-block {
+        margin-top: auto;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background-color: #202020;
+      }
+
+      .nav-links {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+      }
+
+      .nav-links a {
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        padding: 15px 20px;
+      }
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="header-left">
+        <a href="{% url 'thinkpolls_index' %}" class="logo-block">
+          <svg id="thinkpolls-svg" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 46 46">
+            <path
+              d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z"
+              transform="translate(-1 -1)" />
+          </svg>
+
+          <div>Thinkpolls</div>
+        </a>
+      </div>
+      <div class="header-right">
+        {% if username %}
+        <div class="username">
+          {{ username |truncatechars:12 }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
+            <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+          </svg>
+
+          <div class="nav-list">
+            <div>{{ username |truncatechars:12 }}</div>
+            <a href="{% url 'thinkpoll-dashboard' %}">dashboard</a>
+          </div>
+        </div>
+        {% else %}
+        <a href="{% url 'thinkpoll-login' %}" class="login-btn">login to save </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!---->
+    <div class="modal-bg">
+      <div class="modal-block">
+        <div class="embed-copy-block">
+          <div class="embed-title">Embed this poll</div>
+          <textarea id="embed-code"></textarea>
+          <button type="button">copy embed code</button>
+        </div>
+        <div class="modal-section" id="embed">
+          <div class="modal-block-wrapper">
+            <div id="embed-icon" class="share-icons"></div>
+            <div class="modal-text">Embed Poll</div>
+          </div>
+        </div>
+        <div class="modal-section" id="copylink">
+          <div class="modal-block-wrapper">
+            <div id="copylink-icon" class="share-icons"></div>
+            <div class="modal-text">Copy link</div>
+          </div>
+        </div>
+        <div class="modal-section" id="fbshare">
+          <div class="modal-block-wrapper">
+            <div id="fb-icon" class="share-icons"></div>
+            <div class="modal-text">Share on Facebook</div>
+          </div>
+        </div>
+        <div class="modal-section" id="twshare">
+          <div class="modal-block-wrapper">
+            <div id="twitter-icon" class="share-icons"></div>
+            <div class="modal-text">Share on Twitter</div>
+          </div>
+        </div>
+        <div class="modal-section" id="washare">
+          <div class="modal-block-wrapper">
+            <div id="whatsapp-icon" class="share-icons"></div>
+            <div class="modal-text">Share on whatsapp</div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-block-wrapper">
+            <div id="reddit-icon" class="share-icons"></div>
+            <div class="modal-text">Share on reddit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!---->
+    <div class="poll-block">
+      <div class="question-block" id="question-block">
+        {{ q.question }}
+      </div>
+      <div class="poll-option-wrapper">
+        <div class="form-block">
+          <div class="space-bar"></div>
+
+          <!-- <div class="label-wrapper">
+              <label class="option">
+                drgg
+                <div class="label-background"></div>
+              </label>
+              <div class="radio-block">
+                76 <span>%</span>
+                <div class="result-votes">
+                  <div>
+                    7600000
+                  </div>
+                  <span>votes</span>
+                </div>
+              </div>
+            </div>
+          </div>-->
+        </div>
+        <div class="sbt-block">
+          <div id="total-votes-block">
+            <div id="total-votes"></div>
+            <span>votes</span>
+          </div>
+          <a href="https://www.thinkpolls.com/{{ q.poll_url }}">vote</a>
+          <button class="submit-button" id="share-btn" type="button">
+            share
+          </button>
+
+        </div>
+      </div>
+
+
+      <a class="madewithlove-block" href="https://www.youtube.com" target="_blank">
+        made with
+        <svg id="love-svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48"
+          style=" fill:#000000;">
+          <path fill="#FF3D00"
+            d="M32.635,8C29.027,8,25.855,9.828,24,12.597C22.145,9.828,18.973,8,15.365,8C9.641,8,5,12.598,5,18.269C5,28.487,21.15,33.411,24,40c2.85-6.589,19-11.428,19-21.731C43,12.598,38.359,8,32.635,8">
+          </path>
+        </svg>
+        by thinkpolls
+        <svg id="thinkpolls-svg" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 46 46">
+          <path
+            d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z"
+            transform="translate(-1 -1)" />
+        </svg>
+      </a>
+      <div class="site-nav-block">
+        <div class="nav-links">
+          <a href="{%  url 'thinkpolls_page'  %}">#create poll</a><a href="#">#create image poll</a>
+        </div>
+      </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+
+<script src="{% static 'poll_detail/pollresult.js' %}"></script>
+
+<script>
+  WebFont.load({
+    google: {
+      families: ['Quicksand:700', 'Poppins:600', 'Roboto:500']
+
+    }
+
+  });
+</script>
+
+</html>

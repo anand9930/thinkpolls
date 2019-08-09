@@ -1,0 +1,1047 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="fb:app_id" content="668055086954771" />
+    <meta property="og:title" content="{{ q.question }} -Thinkpolls" />
+    <meta property="og:site_name" content="Thinkpolls" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.thinkpolls.com/{{ q.poll_url }}" />
+    <meta property="og:description"content="Vote Now! {% for option in q_options %} [{{option}}]{% endfor %}" />
+    <meta name="title" content="{{ q.question }} -Thinkpolls" />
+    <meta name="type" content="website" />
+    <meta name="url" content="{{ q.poll_url }}" />
+    <meta name="description" content="Vote Now! {% for option in q_options %} [{{option}}]{% endfor %}" />
+    <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg.jpg" />
+    <meta property="og:image:type" content="image/jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg-small.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="400" />
+    <meta name="og:locale" content="en_US" />
+    <title>{{q.question }} -Thinkpolls</title>
+
+
+    <link
+      rel="shortcut icon"
+      href="{% static 'poll_detail/images/favicon.svg' %}"
+    />
+
+
+    <style>
+              body,
+              html {
+                padding: 0px;
+                margin:0px;
+              }
+
+              :root {
+
+                {% if 'blue' in q.theme_color %}
+                --main-color: #3948f2;
+                --sec1-color: #E4F1FE;
+                --sec2-color: #4361E9;
+                {% elif 'red' in q.theme_color  %}
+                --main-color: #F64747;
+                --sec1-color: #FFE8E8;
+                --sec2-color: #FF8282;
+                {% elif 'orange' in  q.theme_color  %}
+                --main-color: #F15A22;
+                --sec1-color: #FDE3A7;
+                --sec2-color: #F68C66;
+                {% elif 'green' in q.theme_color  %}
+                --main-color: #00B16A;
+                --sec1-color: #C8F7C5;
+                --sec2-color: #85CE94;
+                {% elif 'yellow' in q.theme_color  %}
+                --main-color: #F7CA18;
+                --sec1-color: #FFFFCC;
+                --sec2-color: #FFE16A;
+                {% elif 'purple' in q.theme_color  %}
+                --main-color: #8C14FC;
+                --sec1-color: #fadcff;
+                --sec2-color:#bd8fff;
+                {% elif 'black' in q.theme_color  %}
+                --main-color: #2e3131;
+                --sec1-color: #dadfe1;
+                --sec2-color: #e7ebff;
+
+                {% elif 'default' in q.theme_color  %}
+                --main-color: rgb(250, 250, 250);
+                --no-border:none;
+                --sec1-color: #fcfcfc;
+                --sec2-color: #E7EBFF;
+                --q-color: rgb(22, 22, 22);
+                --border: 1.8px solid #6d6d6d;
+                --border-color:#6d6d6d;
+                --border-style: solid;
+                --border-width-label: 1.8px 1.8px 1.8px 0px;
+                --border-width-rbo: 1.8px 0px  1.8px 1.8px;
+                --q-color:black;
+                {%  else %}
+                --main-color: #2e3131;
+                --sec1-color: #dadfe1;
+                --sec2-color: #6c7a89;
+                {% endif %}
+
+                {% if 'default' not in q.theme_color %}
+                --q-color:white;
+                {% endif %}
+              }
+              .wrapper {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin: 0px;
+                padding: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+              }
+               /* header*/
+      .header {
+        top: 0px;
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+      }
+      .header-left {
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+      }
+      .header-right {
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .logo-block {
+        margin-left: 45px;
+        text-decoration: none;
+        align-self: center;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-family: "Quicksand", sans-serif;
+      }
+      .logo-block div {
+        text-decoration: none;
+        padding-left: 10px;
+        color: rgb(22, 22, 22);
+      }
+
+        .username {
+        position: relative;
+        padding: 7px 14px;
+        border-radius: 30px;
+        color: rgb(41, 80, 255);
+        margin-right: 50px;
+        box-sizing: border-box;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        background-color: #e7ebff;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .nav-list {
+        width: 100%;
+        position: absolute;
+        padding: 7px 30px 7px 10px;
+        border-radius: 20px;
+        top: 0px;
+        right: 0px;
+        background-color: #e7ebff;
+        color: #2950ff;
+        display: flex;
+        visibility: hidden;
+        opacity: 0;
+        justify-content: space-evenly;
+        align-items: flex-end;
+        flex-direction: column;
+        transition: 180ms all ease;
+      }
+
+      .nav-list div {
+        padding: 0px;
+      }
+
+      .nav-list a {
+        padding: 3px 0px;
+        text-decoration: none;
+        color: #2950ff;
+      }
+
+      .username:hover .nav-list {
+        visibility: visible;
+        opacity: 1;
+      }
+      .username svg {
+        fill: rgb(41, 80, 255);
+        padding-left: 2px;
+      }
+      .login-btn {
+        cursor: pointer;
+        margin-right: 50px;
+        font-family: "Roboto", sans-serif;
+        text-decoration: none;
+        padding: 8px 13px;
+        border-radius: 6px;
+        background-color: rgb(19, 19, 19);
+        color: white;
+      }
+      /* end  of HEADER */
+              /* MODAL*/
+              .modal-bg {
+                top:0px;
+                position: fixed;
+                width: 100%;
+                height:100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 20;
+               box-sizing: border-box;
+               overflow: hidden;
+              }
+              .modal-bg .modal-block {
+                position: relative;
+                width: 380px;
+                height: 380px;
+                background-color: white;
+                border-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+              }
+              .embed-copy-block{
+                display: none;
+                position: absolute;
+                width: 100%;
+                height:100%;
+                background-color: rgb(251, 251, 251);
+                justify-content: space-evenly;
+                align-items: center;
+                flex-direction: column;
+              }
+              .embed-copy-block .embed-title{
+                font-family: "Roboto", sans-serif;
+                font-size: 19px;
+
+              }
+              .embed-copy-block textarea{
+                resize: none;
+                border:2px solid rgb(129, 129, 129);
+                width: 280px;
+                border-radius:5px;
+                height:200px;
+                outline: none;
+                box-sizing: border-box;
+              }
+              .embed-copy-block button{
+                width: 280px;
+                padding:13px 0px;
+                background-color: #252525;
+                color:#e6e6e6;
+                font-family: "Roboto", sans-serif;
+                font-size: 21px;
+                outline: none;
+                border:none;
+                border-radius:5px;
+                cursor: pointer;
+
+              }
+              .modal-block .modal-section {
+                width: 100%;
+                height: calc(100% / 6);
+                background-color: #ffffff;
+                box-sizing: border-box;
+                border-bottom: 0.5px solid rgb(255, 255, 255);
+                cursor: pointer;
+              }
+              .modal-block .modal-section:hover {
+                background-color: #f3f3f3;
+              }
+              .modal-block .modal-section .modal-block-wrapper {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+              }
+              .share-icons{
+                margin-left:40px;
+                }
+
+              #embed-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -22px -19px;
+                width: 44px;
+                height: 43px;
+
+              }
+              .modal-text {
+                margin-left: 40px;
+                font-size: 16px;
+                font-family: "Roboto", sans-serif;
+                color: #181818;
+              }
+              #copylink-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -76px -19px;
+                width: 43px;
+                height: 43px;
+
+              }
+              #fb-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -147px -18px;
+                width: 44px;
+                height: 44px;
+
+              }
+              #twitter-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -215px -18px;
+                width: 44px;
+                height: 44px;
+
+              }
+              #whatsapp-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -283px -18px;
+                width: 44px;
+                height: 44px;
+
+              }
+              #reddit-icon {
+                background: url("{%static 'poll_detail/images/social_icons2.png' %}")
+                  no-repeat -361px -18px;
+                width: 44px;
+                height: 44px;
+
+              }
+              /* END OF MODAL*/
+              .poll-block {
+                margin: 80px 0px 20px 0px;
+                display: flex;
+                flex-direction: column;
+                background-color: #ffffff;
+                width: 650px;
+                border: 1.8px solid #6d6d6d;
+                border-radius: 24px;
+                overflow: hidden;
+              }
+              .madewithlove-block{
+                  display: none;
+                }
+
+                .site-nav-block{
+                 display: none;
+                }
+              .question-block {
+                z-index: 2;
+                position: relative;
+                width: 100%;
+                color: var(--q-color);
+                background-color:var(  --main-color);
+                padding: 30px 35px 25px 30px;
+                box-sizing: border-box;
+                font-size: 28px;
+                line-height: 35px;
+                font-family: "Poppins", sans-serif;
+              }
+              .share-block {
+                cursor: pointer;
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                top: 100%;
+                margin-top:8px;
+                right: 30px;
+              }
+              .share-block .share-icon{
+                padding: 3px 10px 3px 13px;
+                fill: rgb(83, 83, 83);
+              }
+              .poll-option-wrapper {
+                width: 100%;
+                border-radius: 0px 0px 40px 40px;
+              }
+              .poll-option-wrapper form {
+              position: relative;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 40px 40px 40px 40px;
+                background-color: #ffffff;
+              }
+
+              .poll-option-wrapper form label {
+                margin-top: 25px;
+                width: 90%;
+                box-sizing: border-box;
+                padding: 24px 20px 24px 5px;
+                line-height: 28px;
+                border-width:var( --border-width-label);
+                border-color:var( --border-color);
+                border-style:var( --border-style);
+                background-color: var(--sec1-color);
+                border-radius: 0px 15px 15px 0px;
+                font-size: 20px;
+                font-family: "Poppins", sans-serif;
+                color: rgb(24, 24, 24);
+              }
+
+              .label-wrapper {
+                position: relative;
+                margin-top: 30px;
+                display: flex;
+                width: 85%;
+                align-items: stretch;
+              }
+
+              .radio-block {
+                background-color: var(--sec1-color);
+                display: flex;
+                border: none;
+                justify-content: center;
+                align-items: center;
+                width: 80px;
+                height:auto ;
+                {% if 'default' in q.theme_color  %}
+                border-width:1.8px 0px 1.8px 1.8px;
+                border-color:#6d6d6d;
+                border-style:solid;
+                {% endif %}
+                border-radius: 15px 0px 0px 15px;
+               overflow: hidden;
+              }
+
+              #option {
+                margin-top: 0px;
+              }
+              .rbo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 80px;
+                height: 79.22px;
+                border-radius: 15px 0px 0px 15px;
+                background-color: var(--sec1-color);
+                /* background-image: linear-gradient(#474749, #606062);*/
+                /*  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15),
+                  inset 0 -1px 1px rgba(0, 0, 0, 0.15);*/
+                transition: all 0.15s ease-in;
+              }
+              .rbo svg {
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                {% if 'default' in q.theme_color %}
+                stroke: rgb(0, 17, 255);
+                {% else %}
+                stroke: whitesmoke;
+                {% endif %}
+                stroke-width: 2.3;
+                stroke-dasharray: 17;
+                stroke-dashoffset: 17;
+                transform: translate3d(0, 0, 0);
+              }
+              input[type="radio"] {
+                display: none;
+                opacity: 0;
+              }
+
+              input[type="radio"]:checked ~ .radio-block .rbo svg {
+                stroke-dashoffset: 0;
+                transition: all 0.19s ease-in;
+              }
+              {% if 'default' not in q.theme_color  %}
+              input[type="radio"]:checked ~ .radio-block {
+                border-style: solid;
+                border-width: 2px 0px 2px 2px;
+                border-color:  var(--main-color);
+              }
+
+
+              input[type="radio"]:checked ~ label {
+               border-style: solid;
+                border-width: 2px 2px 2px 0px;
+                border-color:  var(--main-color);
+              }
+              {% endif %}
+              input[type="radio"]:checked ~ .radio-block .rbo {
+                /*background-color: #ff0000;*/
+              }
+              /*  input[type="radio"]:checked ~ label {
+                border: 1.5px solid #280068;
+                border-right: none;
+                color: #280068;
+              }*/
+              label:hover ~ .radio-block .rbo {
+                /*background-image: linear-gradient(#255cd2, #1d52c1);*/
+              }
+            /*  label: ~.radio-block .rbo svg {
+                stroke-dashoffset: 0;
+                transition: all 0.19s ease-in;
+              }*/
+              .svg-background {
+                border-radius: 50%;
+                {% if 'default' in q.theme_color %}
+                background-color: #e0e0e0;
+                {% else %}
+                background-color:var(--sec2-color);
+                {% endif%}
+                width: 43px;
+                height: 43px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              input[type="radio"]:checked ~ .radio-block .rbo .svg-background {
+                {% if 'default' in q.theme_color %}
+                background-color:rgb(162, 184, 255);
+
+                {% else %}
+                background-color: var(--main-color);
+                {% endif%}
+              }
+              .space-bar {
+                height: 20px;
+                width: 100%;
+
+              }
+              /*
+              .submit-button-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: white;
+              }
+              .poll-submit-button {
+                outline: none;
+                cursor: pointer;
+                font-family: Arial, sans-serif;
+                font-size: 26px;
+                border: var(--border);
+                border-radius: 40px;
+                padding: 11px 28px;
+                background-color: var(--main-color);
+                color: var(--q-color);
+                margin: 25px 0px;
+              }*/
+
+              .sbt-block {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+            .sbt-block .submitted-button {
+              text-decoration: none;
+              outline: none;
+              cursor: pointer;
+              font-family: "Roboto", sans-serif;
+              font-size: 18.5px;
+              border: var(--border);
+              border-radius: 7px;
+              padding: 10px 10px;
+              background-color: var(--main-color);
+              color: var(--q-color);
+              margin: 25px 120px 25px 0px;
+              box-sizing: border-box;
+                 }
+            .sbt-block .submitted-button:last-child{
+                  margin: 25px 0px 25px 0px;
+                 } 
+
+          .btn {
+              position: relative;
+              outline: none;
+              cursor: pointer;
+              font-family: "Roboto", sans-serif;
+              font-size: 21px;
+              border: var(--border);
+              border-radius: 7px;
+              padding: 10px 56px;
+              background-color: var(--main-color);
+              color: var(--q-color);
+              margin: 25px 0px;
+              box-sizing: border-box;
+              }
+          #ckbox {
+            top:0px;
+            left:0px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(65, 12, 212);
+            box-sizing: border-box;
+          }
+          #ckbox:checked ~ .btn-sucess {
+            opacity: 1;
+            top: 0px;
+            visibility: visible;
+          }
+          #ckbox:checked ~ #btn-text {
+            color: rgb(255, 255, 255);
+          }
+          #btn-text {
+            color: rgb(0, 0, 0);
+          }
+          .btn-sucess {
+            top: 70%;
+            left: 0px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            font-size: 18.5px;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            justify-content: center;
+            align-items: center;
+            transition: 180ms all ease;
+          }
+
+
+            @media(max-width:480px){
+
+              body,html{
+                background-color: #202020;
+              }
+            .wrapper {
+             background-color: #ffffff;
+              }
+            .header {
+              display: none;
+             }
+            .poll-block {
+              margin-top: 0px;
+              width: 100%;
+              border:none;
+              border-radius: 0px;
+            }
+            .question-block {
+              font-size: 30px;
+              line-height: 35px;
+              padding: 40px 35px 40px 30px;
+            }
+            .poll-option-wrapper form  label {
+              line-height: 27px;
+              font-size: 20px;
+              padding: 0px  13px 0px 3px;
+              display: flex;
+              align-items: center;
+            }
+            .rbo {
+              width:70px ;
+              height: 70px;
+            }
+            .radio-block {
+              width:70px ;
+            }
+/**/
+.sbt-block .submitted-button {
+
+              margin: 25px 20px 25px 0px;
+    
+                 }
+
+/**/
+            .modal-bg .modal-block {
+              width: 88%;
+            }
+
+          .share-icons{
+            margin-left: 20px;
+            }
+          .madewithlove-block {
+            margin-top:10px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family:  sans-serif;
+            font-size: 15px;
+            padding: 5px;
+            color: rgb(53, 53, 53);
+          }
+        .madewithlove-block #love-svg {
+          padding: 0px 3px;
+          width: 25px;
+          height: 25px;
+        }
+        .madewithlove-block #thinkpolls-svg {
+          padding-left: 10px;
+          width: 22px;
+          height: 22px;
+        }
+      .site-nav-block{
+        margin-top:auto;
+        margin-bottom: 0px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background-color: #202020;
+      }
+       .nav-links{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-family: "Poppins", sans-serif;
+        font-size:13px;
+            }
+         .nav-links a{
+          color:rgb(255, 255, 255);
+          text-decoration: none;
+          padding: 15px 20px ;
+         }
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="header-left">
+          <a href="{% url 'thinkpolls_index' %}" class="logo-block">
+            <svg
+              id="thinkpolls-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 46 46"
+            >
+              <path
+                d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z"
+                transform="translate(-1 -1)"
+              />
+            </svg>
+
+            <div>Thinkpolls</div>
+          </a>
+        </div>
+        <div class="header-right">
+        {% if username %}
+          <div class="username">
+            {{ username |truncatechars:12 }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"
+              />
+            </svg>
+
+            <div class="nav-list">
+              <div>{{ username |truncatechars:12 }}</div>
+              <a href="{% url 'thinkpoll-dashboard' %}">dashboard</a>
+            </div>
+          </div>
+          {% else %}
+          <a href="{% url 'thinkpoll-login' %}" class="login-btn"
+            >login to save </a
+          >{% endif %}
+        </div>
+      </div>
+      <div class="modal-bg">
+        <div class="modal-block">
+          <div class="embed-copy-block">
+            <div class="embed-title">Embed this poll</div>
+            <textarea id="embed-code"></textarea>
+            <button type="button">copy embed code</button>
+          </div>
+          <div class="modal-section" id="embed">
+            <div class="modal-block-wrapper">
+              <div id="embed-icon" class="share-icons"></div>
+              <div class="modal-text">Embed Poll</div>
+            </div>
+          </div>
+          <div class="modal-section" id="copylink">
+            <div class="modal-block-wrapper">
+              <div id="copylink-icon" class="share-icons"></div>
+              <div class="modal-text">Copy link</div>
+            </div>
+          </div>
+          <div class="modal-section" id="fbshare">
+            <div class="modal-block-wrapper">
+              <div id="fb-icon" class="share-icons"></div>
+              <div class="modal-text">Share on Facebook</div>
+            </div>
+          </div>
+          <div class="modal-section" id="twshare">
+            <div class="modal-block-wrapper">
+              <div id="twitter-icon" class="share-icons"></div>
+              <div class="modal-text">Share on Twitter</div>
+            </div>
+          </div>
+          <div class="modal-section" id="washare">
+            <div class="modal-block-wrapper">
+              <div id="whatsapp-icon" class="share-icons"></div>
+              <div class="modal-text">Share on whatsapp</div>
+            </div>
+          </div>
+          <div class="modal-section">
+            <div class="modal-block-wrapper">
+              <div id="reddit-icon" class="share-icons"></div>
+              <div class="modal-text">Share on reddit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="poll-block">
+        <div class="question-block" id="question-block">
+          {{ q.question }}
+          <div class="share-block">
+            <div class="share-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 7c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5zm11.122 12.065c-.073.301-.122.611-.122.935 0 2.209 1.791 4 4 4s4-1.791 4-4-1.791-4-4-4c-1.165 0-2.204.506-2.935 1.301l-5.488-2.927c-.23.636-.549 1.229-.943 1.764l5.488 2.927zm7.878-15.065c0-2.209-1.791-4-4-4s-4 1.791-4 4c0 .324.049.634.122.935l-5.488 2.927c.395.535.713 1.127.943 1.764l5.488-2.927c.731.795 1.77 1.301 2.935 1.301 2.209 0 4-1.791 4-4z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="poll-option-wrapper" id="poll-option-wrapper">
+          <form action="" method="post" id="poll_form">
+            <div class="space-bar"></div>
+            {% csrf_token %} {% for option in q_options %}
+            <div class="label-wrapper">
+              <input
+                type="radio"
+                name="option_value"
+                id="yo_{{ forloop.counter }}"
+                value="{{ option }}"
+                class="input-option"
+                required
+              />
+              <div class="radio-block">
+                <span class="rbo">
+                  <div class="svg-background">
+                    <svg width="24px" height="23px" viewBox="0 0 12 11">
+                      <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                    </svg>
+                  </div>
+                </span>
+              </div>
+              <label
+                for="yo_{{ forloop.counter }}"
+                id="option"
+                class="option-value"
+                value="{{ option }}"
+                onclick="option_locker('{{ option }}')"
+              >
+                {{ option }}
+              </label>
+            </div>
+            {% endfor %}
+            <div class="sbt-block">
+              {% if vote_submitted %}
+
+              <button class="submitted-button" type="button" >
+                vote submitted!
+              </button>
+              <a class="submitted-button" href="{{q.poll_url}}/results">view results</a>
+
+              {% else %}
+              <button class="btn" type="button" id="poll_submit">
+                <input type="checkbox" id="ckbox" style="display: none;" />
+                <div id="btn-text">vote</div>
+                <div class="btn-sucess">vote submitted!</div>
+              </button>
+
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </div>
+      <a
+        class="madewithlove-block"
+        href="https://www.youtube.com"
+        target="_blank"
+      >
+        made with
+        <svg
+          id="love-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="48"
+          height="48"
+          viewBox="0 0 48 48"
+          style=" fill:#000000;"
+        >
+          <path
+            fill="#FF3D00"
+            d="M32.635,8C29.027,8,25.855,9.828,24,12.597C22.145,9.828,18.973,8,15.365,8C9.641,8,5,12.598,5,18.269C5,28.487,21.15,33.411,24,40c2.85-6.589,19-11.428,19-21.731C43,12.598,38.359,8,32.635,8"
+          ></path>
+        </svg>
+        by thinkpolls
+        <svg
+          id="thinkpolls-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 46 46"
+        >
+          <path
+            d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z"
+            transform="translate(-1 -1)"
+          />
+        </svg>
+      </a>
+      <div class="site-nav-block">
+        <div class="nav-links">
+          <a href="{%  url 'thinkpolls_page'  %}">#create poll</a
+          ><a href="#">#create image poll</a>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Quicksand:700', 'Poppins:600', 'Roboto:500']
+
+    }
+
+  });
+</script>
+
+  <script
+    defer
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"
+  ></script>
+  <script defer src="{% static 'poll_detail/pollview.js' %}"></script>
+  <script>
+    // set the length of the string
+    var stringLength = 30;
+
+    // list containing characters for the random string
+    var stringArray = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "4",
+      "8",
+      "9",
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ];
+
+    var rndString = "";
+
+    // build a string with random characters
+    for (var i = 1; i < stringLength; i++) {
+      var rndNum = Math.ceil(Math.random() * stringArray.length) - 1;
+      rndString = rndString + stringArray[rndNum];
+    }
+
+    // console.log(rndString);
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    var thinkpolls_cookie = getCookie("thinkpolls");
+    if (thinkpolls_cookie == null) {
+      document.cookie = "thinkpolls=" + rndString;
+    } else {
+      console.log(thinkpolls_cookie);
+    }
+
+    function option_locker(o) {
+      console.log(o);
+      document.querySelector("input[name='option_value']").value = o;
+    }
+  </script>
+</html>

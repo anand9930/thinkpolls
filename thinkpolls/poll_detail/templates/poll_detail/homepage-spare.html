@@ -1,0 +1,519 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Thinkpolls</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Sofia&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:600"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="{% static 'poll_detail/images/favicon.png' %}"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="{% static 'poll_detail/thinkpolls.js' %}"></script>
+    <style>
+      body,
+      html {
+        padding: 0px;
+        margin: 0px;
+      }
+      .wrapper {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        background-color: rgba(241, 242, 243, 0);
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+      }
+      .header .head-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        font-family: "Roboto", sans-serif;
+      }
+      .head-nav a {
+        padding: 7px 13px;
+        text-decoration: none;
+        color: rgb(31, 31, 31);
+        font-size: 16px;
+        border-radius: 5px;
+      }
+      .head-nav a:hover {
+        font-size: 16px;
+        background-color: rgb(240, 240, 240);
+        color: rgb(12, 12, 12);
+      }
+      #signup_button {
+        background-color: rgb(27, 27, 27);
+        color: rgb(251, 251, 251);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo img {
+      }
+      .logo-name {
+        font-size: 22.5px;
+        color: white;
+        padding-left: 10px;
+        font-family: "Quicksand", sans-serif;
+      }
+      .header-grid-section {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        grid-template-rows: auto;
+      }
+      .header-intro-section {
+        /* background-color: rgb(248, 77, 114);*/
+        background-color: rgb(11, 105, 255);
+        color: whitesmoke;
+        font-size: 40px;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .header-createpoll-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .header-createpoll-section .newtab {
+        text-decoration: none;
+        background-color: #f1f1f1;
+        color: rgb(3, 39, 241);
+        padding: 5px 10px;
+        font-size: 14px;
+        margin-top: 120px;
+        font-family: "Poppins", sans-serif;
+        border-radius: 10px;
+      }
+      .header-createpoll-section .newtab:hover {
+        background-color: #e9fbff;
+      }
+      /* START POLL CREATE*/
+      .poll-block {
+        margin: 30px 0px 100px 0px;
+        max-width: 650px;
+        width: 80%;
+        background-color: rgb(251, 251, 251);
+        border-radius: 24px;
+        border: 1.8px solid #6d6d6d;
+        overflow: hidden;
+      }
+      .poll-block form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .question-block {
+        width: 100%;
+        border-radius: 24px 24px 0px 0px;
+        overflow: hidden;
+        color: rgb(0, 0, 0);
+        padding: 25px 25px;
+        box-sizing: border-box;
+        background-color: #fafafa;
+      }
+      .question-block textarea {
+        border: none;
+        resize: none;
+        height: auto;
+        width: 100%;
+        color: #000000;
+        font-size: 28px;
+        line-height: 35px;
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+        outline: none;
+        background-color: #fafafa;
+      }
+      .option-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+      }
+      textarea {
+        resize: none;
+      }
+      .option-block {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+      .box {
+        border: none;
+        position: relative;
+        background-color: rgb(233, 251, 255);
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 16px 16px;
+        margin-top: 25px;
+        font-size: 20px;
+        outline: none;
+        width: 80%;
+        font-family: "Poppins", sans-serif;
+      }
+      .box::placeholder {
+        color: rgb(81, 81, 209);
+      }
+      #option1 {
+        margin-top: 45px;
+      }
+      .cross-btnn {
+        /* visibility: visible;
+              opacity: 1;*/
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 14.5%;
+        transform: translate(30%, -20%);
+        transition: 150ms all ease-in-out;
+      }
+      .menu-btn {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        left: 100%;
+        transform: translate(-130%, -90%) scale(0.1, 0.1);
+        transition: 150ms all ease-in-out;
+      }
+
+      .sbt-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+      }
+      .sbt-block button {
+        outline: none;
+        cursor: pointer;
+        font-family: "Roboto", sans-serif;
+        font-size: 21px;
+        border: none;
+        border-radius: 7px;
+        padding: 9px 16px;
+        background-color: #0b69ff;
+        color: white;
+        margin: 25px 0px;
+      }
+      /* END OF POLL CREATE */
+      .pro-big-title {
+        font-family: "Roboto", sans-serif;
+        font-size: 30px;
+        padding: 10px 0px;
+        text-align: center;
+      }
+      .pros-section {
+        width: 80%;
+        display: grid;
+        margin: 0px auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+      .pros-section .pros-block {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background-color: rgb(251, 251, 251);
+        flex-direction: column;
+        padding: 10px;
+      }
+      .pros-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .pros-title {
+        padding: 7px 0px;
+        font-size: 24px;
+        color: #2c2c2c;
+        font-family: "Poppins", sans-serif;
+      }
+      .pros-text {
+        padding: 7px 60px 7px 0px;
+        font-size: 16px;
+        color: #5d5d5d;
+        font-family: "Roboto", sans-serif;
+      }
+      .apps-grid-wrapper {
+        margin: 30px 0px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #2f32fa;
+        padding: 60px 10px;
+        box-sizing: border-box;
+      }
+      .apps-grid {
+        display: grid;
+        width: 90%;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .content-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .content-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 58px;
+        padding: 30px 0px;
+        color: #ffffff;
+      }
+      .content-text {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        padding: 10px 50px 10px 0px;
+        color: #d1d1d1;
+      }
+      .content-img {
+        padding: 30px 0px;
+        background: url("https://images.unsplash.com/photo-1479920252409-6e3d8e8d4866?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover;
+      }
+      @media (max-width: 480px) {
+        .header-grid-section {
+          width: 100%;
+          display: grid;
+          grid-template-rows: 400px auto;
+          grid-template-columns: 100%;
+        }
+        .header .head-nav {
+          display: none;
+        }
+        .header {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+        .poll-block {
+          margin: 50px 0px;
+        }
+        .pros-section {
+          width: 100%;
+          display: grid;
+          margin: 0px auto;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
+        }
+        .pros-text {
+          padding: 7px 10px;
+        }
+        .pros-title {
+          padding: 7px 0px;
+          font-size: 18px;
+          color: #2c2c2c;
+          font-family: "Poppins", sans-serif;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="logo">
+          <img src="{% static 'poll_detail/images/logo.png' %}" alt="" />
+          <div class="logo-name">Thinkpolls</div>
+        </div>
+        <div class="head-nav">
+          <a href="{% url 'imagepoll' %}">image poll</a>
+          <a href="#">yes or no poll</a>
+          <a href="#">blog</a>
+          <a href="{% url 'thinkpoll-login' %}">login</a>
+          <a href="{% url 'thinkpoll-signup' %}" id="signup_button">signup</a>
+        </div>
+      </div>
+      <div class="header-grid-section">
+        <div class="header-intro-section">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ips
+        </div>
+        <div class="header-createpoll-section">
+          <a href="{% url 'thinkpolls_page' %}" class="newtab"
+            >#create poll in newtab</a
+          >
+          <div class="poll-block">
+            <form action="" method="post">
+              {% csrf_token %}
+              <div class="question-block">
+                <textarea
+                  name="input_0"
+                  placeholder="what your question?"
+                  onkeyup="textAreaAdjust(this)"
+                  rows="1"
+                ></textarea>
+              </div>
+              <div class="option-wrapper">
+                <div class="option-block">
+                  <textarea
+                    type="text"
+                    name="input_1"
+                    id="option1"
+                    class="box"
+                    required
+                    placeholder="#option1"
+                    rows="1"
+                    onkeyup="textAreaAdjust(this)"
+                  ></textarea>
+                  <div class="cross-btnn">
+                    <img
+                      src="https://img.icons8.com/color/24/000000/cancel.png"
+                    />
+                  </div>
+                  <div class="menu-btn opt-btn">
+                    <img
+                      src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                    />
+                  </div>
+                </div>
+                <div class="option-block">
+                  <textarea
+                    type="text"
+                    name="input_2"
+                    id="lastoption"
+                    class="box"
+                    required
+                    placeholder="#option2"
+                    rows="1"
+                    onkeyup="textAreaAdjust(this)"
+                  ></textarea>
+                  <div class="cross-btnn">
+                    <img
+                      src="https://img.icons8.com/color/24/000000/cancel.png"
+                    />
+                  </div>
+                  <div class="menu-btn opt-btn">
+                    <img
+                      src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="sbt-block">
+                <button class="submit-button" type="submit">create poll</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-big-title">Polls are Good</div>
+      <div class="pros-section">
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2013/240/iconmonstr-code-2.png"
+              alt=""
+              style="width: 30px"
+            />
+          </div>
+          <div class="pros-title">Embed</div>
+          <div class="pros-text">
+            Add polls to your website with a click interact more with your
+            customers and collect data from anywhere.
+          </div>
+        </div>
+
+        <div class="pros-block">
+          <div class="pros-icon"></div>
+          <div class="pros-title">Speak your Brand</div>
+          <div class="pros-text">
+            User-friendly and highly responsive for all the platforms out there.
+          </div>
+        </div>
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-chart-13.png"
+              alt=""
+              style="width: 30px"
+            />
+          </div>
+          <div class="pros-title">Realtime results</div>
+          <div class="pros-text">
+            Accurate results without a delay.
+          </div>
+        </div>
+
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/96/iconmonstr-time-13.png"
+              alt=""
+              style="width: 33px"
+            />
+          </div>
+          <div class="pros-title">Polls in sec</div>
+          <div class="pros-text">
+            Create instant polls with a few clicks made with django
+          </div>
+        </div>
+      </div>
+      <div class="apps-grid-wrapper">
+        <div class="apps-grid">
+          <div class="content-section">
+            <div class="content-title">Lorem Ipsum</div>
+            <div class="content-text">
+              has been the industry's standard dummy text ever since the 1500s,
+              when an unknown printer took a galley of type and scrambled it to
+              make a type specimen book. It has survived not only five
+              centuries, but also the leap into electronic typesetting,
+              remaining essentially unchanged. It was popularised in the 1960s
+              with the release of Letraset sheets containing Lorem Ipsum
+              passages, and more recently with desktop publishing software like
+              Aldus PageMaker including versions of Lorem Ipsu
+            </div>
+          </div>
+          <div class="content-img"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,533 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes"></script>
+    <style>
+      body,
+      html {
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+      }
+      .wrapper {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .header {
+        top: 0px;
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .header-left {
+        width: 50%;
+      }
+      .header-right {
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .logo-block {
+        padding-left: 45px;
+        text-decoration: none;
+        align-self: center;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-family: "Quicksand", sans-serif;
+      }
+      .logo-block div {
+        text-decoration: none;
+        padding-left: 10px;
+        color: rgb(22, 22, 22);
+      }
+      .username-wrapper {
+        position: relative;
+      }
+      .username {
+        padding: 7px 20px 7px 14px;
+        border-radius: 30px;
+        color: rgb(41, 80, 255);
+        margin-right: 50px;
+        max-width: 200px;
+        box-sizing: border-box;
+        font-size: 18px;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        background-color: #e7ebff;
+        font-family: "Roboto", sans-serif;
+      }
+      .nav-list {
+        width: 80%;
+        position: absolute;
+        padding: 7px 20px;
+        border-radius: 20px;
+        top: 0px;
+        right: 50px;
+        background-color: #e7ebff;
+        color: #2950ff;
+        display: flex;
+        visibility: hidden;
+        opacity: 0;
+        align-items: flex-end;
+        flex-direction: column;
+        justify-content: space-evenly;
+        transition: 180ms all ease;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .nav-list div {
+        max-width: 10ch;
+      }
+      .nav-list a {
+        text-decoration: none;
+        padding-top: 6px;
+        color: #2950ff;
+      }
+      .username:hover .nav-list {
+        visibility: visible;
+        opacity: 1;
+      }
+      .username svg {
+        position: absolute;
+        right: 55px;
+        fill: rgb(41, 80, 255);
+        padding-left: 2px;
+      }
+      .welcome-user-block {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        /*background-color: rgb(243, 243, 243);*/
+        background-color: rgb(250, 250, 250);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .welcome-user-block .big-text {
+        font-family: "Poppins", sans-serif;
+        font-size: 40px;
+        align-self: flex-start;
+        padding-left: 100px;
+      }
+      .welcome-user-block .small-text {
+        font-size: 30px;
+        font-family: "Roboto", sans-serif;
+        align-self: flex-start;
+        padding-left: 100px;
+      }
+      .welcome-user-block .dash-nav {
+        position: absolute;
+        width: 100%;
+        bottom: 20px;
+        left: 100px;
+        display: flex;
+      }
+      .welcome-user-block .dash-nav a {
+        text-decoration: none;
+        color: rgb(36, 36, 36);
+        padding: 6px 13px;
+        margin-right: 15px;
+        background-color: rgb(224, 224, 224);
+        border-radius: 100px;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      .welcome-user-block .dash-nav a:hover {
+        background-color: rgb(206, 206, 206);
+        color: rgb(0, 0, 0);
+      }
+
+      .poll-data-wrapper {
+        position: relative;
+        margin: 30px auto;
+        width: 80%;
+        border: 2px solid rgb(54, 54, 54);
+        height: auto;
+        border-radius: 10px;
+        display: flex;
+        overflow: hidden;
+      }
+      .url-show-poll {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        transform: scale(0);
+        transition: 100ms visibility ease, 100ms opacity ease,
+          300ms transform ease;
+      }
+      .url-show-poll svg {
+        fill: rgb(193, 192, 255);
+        background-color: rgb(52, 52, 251);
+        border-radius: 60%;
+      }
+      .show-data-btn {
+        position: absolute;
+        bottom: 12px;
+        right: 20px;
+        transition: 260ms transform linear;
+      }
+      .show-data-btn svg {
+        fill: rgb(52, 52, 251);
+        padding: 10px;
+        border-radius: 50%;
+        background-color: rgb(193, 192, 255);
+      }
+
+      .question-data-block {
+        font-family: "Poppins", sans-serif;
+        padding: 20px 30px;
+        font-size: 26px;
+        line-height: 36px;
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .show-data-checker:checked ~ .chart-data {
+        display: flex;
+      }
+      .show-data-checker:checked ~ .question-data-block {
+        /*   background-color: rgb(193, 192, 255);*/
+        width: 65%;
+        font-size: 30px;
+        line-height: 37px;
+      }
+      .show-data-checker:checked ~ .show-data-btn {
+        transform: rotate(180deg);
+      }
+      .show-data-checker:checked ~ .url-show-poll {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1);
+      }
+      .chart-data {
+        width: 35%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+      .chart-container {
+        padding: 20px 0px;
+        height: auto;
+      }
+
+      @media (max-width: 480px) {
+        /*header*/
+
+        .header-left {
+          width: 40%;
+        }
+        .header-right {
+          width: 60%;
+        }
+        .logo-block svg {
+          width: 34px;
+          height: 34px;
+        }
+        .logo-block div {
+          font-size: 15px;
+          padding-left: 6px;
+        }
+        .username {
+          padding: 6px 17px 6px 10px;
+          max-width: 150px;
+          margin-right: 25px;
+          font-size: 17px;
+        }
+        .nav-list {
+          right: 25px;
+        }
+
+        .username svg {
+          padding: 6px 0px 6px 0px;
+          right: 30px;
+          width: 10px;
+          height: 10px;
+          background-color: #e7ebff;
+        }
+        /*header*/
+
+        .logo-block {
+          padding-left: 15px;
+        }
+        .username {
+          margin-right: 25px;
+        }
+        .welcome-user-block .big-text {
+          font-size: 30px;
+          align-self: center;
+          padding-left: 0px;
+        }
+        .welcome-user-block .small-text {
+          font-size: 20px;
+          align-self: center;
+          text-align: center;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .poll-data-wrapper {
+          width: 90%;
+          margin: 23px auto;
+          display: flex;
+          flex-direction: column;
+          border: 2px solid rgb(54, 54, 54);
+        }
+        .welcome-user-block .dash-nav {
+          display: flex;
+          justify-content: space-evenly;
+          left: 0px;
+          font-size: 13px;
+        }
+        .welcome-user-block .dash-nav a {
+          padding: 4px 7px;
+          margin-right: 0px;
+        }
+        .url-show-poll svg {
+          width: 35px;
+          height: 35px;
+        }
+        .show-data-btn {
+          bottom: 2px;
+          right: 20px;
+        }
+        .show-data-btn svg {
+          width: 15px;
+          height: 15px;
+          padding: 10px;
+        }
+        .question-data-block {
+          padding: 10px 15px;
+          font-size: 20px;
+          line-height: 27px;
+        }
+        .show-data-checker:checked ~ .question-data-block {
+          /*   background-color: rgb(193, 192, 255);*/
+          width: 100%;
+          font-size: 23px;
+          line-height: 30px;
+        }
+
+        .chart-data {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="header-left">
+          <a href="{% url 'thinkpolls_index' %}" class="logo-block">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48 48"
+              width="40px"
+            >
+              <title>thinkpolls-homepage</title>
+              <path
+                class="cls-1"
+                d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z"
+              />
+            </svg>
+            <div>Thinkpolls</div>
+          </a>
+        </div>
+        <div class="header-right">
+          <div class="username-wrapper">
+            <div class="username">
+              {{ username }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"
+                />
+              </svg>
+
+              <div class="nav-list">
+                <div>{{ username }}</div>
+                <a href="{% url 'thinkpolls_page' %}">create poll</a>
+                <a href="{% url 'imagepoll' %}"> img poll</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="welcome-user-block">
+        <div class="big-text">Hello {{ username }}!</div>
+        <div class="small-text">
+          is simply dummy text of the printing and typesetting industry. Lorem
+          Ipsum h
+        </div>
+        <div class="dash-nav">
+          <a href="{% url 'image-dashboard'  %}">view image polls</a>
+          <a href="{% url 'thinkpolls_page' %}">create poll</a>
+          <a href="{% url 'imagepoll' %}">create image poll</a>
+        </div>
+      </div>
+
+      <div class="poll-data-wrapper">
+        <div class="question-data-block" id="somequestion" vote_data="0 0 ">
+          m Ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem Ipsum han the 1960s with the relea
+        </div>
+        <div class="chart-data">
+          <div class="chart-container">
+            <canvas id="something" width="50" height="50"></canvas>
+          </div>
+        </div>
+      </div>
+      {% for poll in poll_list %}
+      <div class="poll-data-wrapper">
+        <input
+          type="checkbox"
+          class="show-data-checker"
+          id="showcheck{{ forloop.counter0 }}"
+          style="display: none"
+        />
+        <label for="showcheck{{ forloop.counter0 }}" class="show-data-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"
+            />
+          </svg>
+        </label>
+        <a
+          class="url-show-poll"
+          href="http://127.0.0.1:8000/{{ poll.poll_url }}"
+          target="_blank"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="42"
+            height="42"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 15.889v-2.223s-3.78-.114-7 3.333c1.513-6.587 7-7.778 7-7.778v-2.221l5 4.425-5 4.464z"
+            />
+          </svg>
+        </a>
+        <div class="question-data-block" id="question{{ forloop.counter0 }}">
+          {{ poll.q_text }}
+        </div>
+        <div class="chart-data">
+          <div class="chart-container">
+            <canvas
+              id="myChart{{ forloop.counter0 }}"
+              width="50"
+              height="50"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </body>
+  <script>
+
+    var customColorFunction = function(schemeColors) {
+      var myColors = [
+        "#ff6361",
+        "#ffa600",
+        "#3490de",
+        "#ff6337",
+        "#6639a6",
+        "#155263",
+        "#fd367e",
+        "#a100ff",
+        "#baf5f0"
+      ]; // define/generate own colors
+
+      // extend the color scheme with own colors
+
+      return myColors; // optional: this is not needed if the array is modified in place
+    };
+
+    {% for poll in poll_list %}
+    var option_list=[]
+    var vote_list=[]
+    {% for option in poll.get_option_list %}
+    option_list.push("{{option}}");
+    console.log("optionlist-"+option_list);
+    {% endfor %}
+
+    {% for vote in poll.get_vote_list %}
+    var vote="{{vote}}";
+    vote_list.push(vote);
+    console.log("votelist-"+vote_list);
+    {% endfor %}
+
+    var chart_id="myChart{{ forloop.counter0 }}";
+    console.log(chart_id)
+
+      var ctx = document.getElementById(chart_id).getContext("2d");
+      Chart.defaults.global.legend.display = false;
+      Chart.defaults.global.tooltips.titleFontSize=50;
+      ctx.canvas.parentNode.style.width = "250px";
+      var myChart{{ forloop.counter0 }} = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels:option_list,
+          datasets: [
+            {
+
+              data: vote_list,
+            }
+          ]
+        },
+        options: {
+          plugins: {
+            colorschemes: {
+              scheme: "brewer.Paired12",
+              custom: customColorFunction
+            }
+          },
+          tooltips: {
+          titleFontSize: 18,
+          bodyFontSize: 18
+        }
+        }
+      });
+
+      {% endfor %}
+  </script>
+</html>

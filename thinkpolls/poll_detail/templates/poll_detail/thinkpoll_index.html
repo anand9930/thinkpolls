@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Think poll</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="{% static 'poll_detail/thinkpolls.js' %}"></script>
+    <style>
+      body,
+      html {
+        padding: 0px;
+        margin: 0px;
+      }
+      .wrapper {
+        width: 100%;
+        background-color: azure;
+        display: flex;
+        flex-direction: column;
+      }
+      .nav-wrapper {
+        width: 100%;
+        height: 66px;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        align-items: center;
+      }
+      .logo {
+        font-size: 28px;
+        margin-left: 80px;
+        font-family: "Montserrat", sans-serif;
+        flex: 6;
+        color: rgb(70, 70, 70);
+      }
+      .login {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .login a {
+        font-family: "Open Sans", sans-serif;
+        font-size: 17px;
+        text-decoration: none;
+        color: rgb(37, 37, 37);
+        border: 1.5px solid rgb(100, 100, 100);
+        border-radius: 4px;
+        padding: 6px 16px;
+        text-align: center;
+      }
+      .signup {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .signup a {
+        font-size: 17px;
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        background-color: rgb(65, 65, 65);
+        padding: 7px 16px;
+        font-family: "Open Sans", sans-serif;
+        text-align: center;
+        border-radius: 4px;
+      }
+      .poll-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 600px;
+        background-color: rgb(251, 251, 251);
+      }
+      .poll-block {
+        width: 700px;
+        background-color: rgb(251, 251, 251);
+        border-radius: 24px;
+        border: 2px solid #6200ff;
+        border-bottom:none; 
+      }
+      .poll-block form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #question {
+        font-family: "Helvetica";
+        background-color: #6200ff;
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+        padding: 25px 30px;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        resize: none;
+        width: 100%;
+        height: 124px;
+        border-radius: 20px 20px 0px 0px;
+        transition: 250ms height cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+      textarea {
+        resize: none;
+      }
+      #question::placeholder {
+        color: rgb(255, 255, 255);
+      }
+      .option-wrapper {
+        margin-top: -40px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 40px 40px 0px 0px;
+        background-color: rgb(255, 255, 255);
+      }
+
+      .option-block {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+      .box {
+        border: none;
+        position: relative;
+        background-color: #e0faff;
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 16px 16px;
+        margin-top: 25px;
+        font-size: 20px;
+        outline: none;
+        width: 80%;
+        font-family: "Poppins", sans-serif;
+      }
+      .box::placeholder {
+        color: blue;
+      }
+      .box:focus {
+      }
+      #option1 {
+        margin-top: 45px;
+      }
+      .cross-btnn {
+        /* visibility: visible;
+        opacity: 1;*/
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 14.5%;
+        transform: translate(30%, -20%);
+        transition: 150ms all ease-in-out;
+      }
+      .menu-btn {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        left: 100%;
+        transform: translate(-130%, -90%) scale(0.1, 0.1);
+        transition: 150ms all ease-in-out;
+      }
+      .add-opn {
+        margin-top: 25px;
+        margin-bottom:20px; 
+      }
+      .add-opn button {
+        cursor: pointer;
+        outline: none;
+        border: none;
+        color: #41006d;
+        padding: 10px 50px;
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        border-radius: 25px;
+        background: #eedbff;
+      }
+      .sbt-block{
+        
+        width: 100%;
+        border-radius: 24px;
+        border:2px solid #ffe600;
+      }
+      .sbt-block button{
+        outline: none;
+        cursor: pointer;
+        font-family: "Helvetica";
+        font-size: 25px;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 21px;
+        background-color: #ffe600;
+        color:rgb(24, 24, 24);
+        padding:23px 0px; 
+        width: 100%;
+ 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="nav-wrapper">
+        <div class="logo">Think polls</div>
+        <div class="login"><a href="#">Login</a></div>
+        <div class="signup"><a href="#">Sign Up</a></div>
+      </div>
+      <div class="poll-wrapper">
+        <div class="poll-block">
+          <form action="" method="post">
+            {% csrf_token %}
+            <textarea
+              name="input_0"
+              id="question"
+              placeholder="Whats your question?"
+            ></textarea>
+            <div class="option-wrapper">
+              <div class="option-block">
+                <textarea
+                  type="text"
+                  name="input_1"
+                  id="option1"
+                  class="box"
+                  required
+                  placeholder="#option1"
+                  rows="1"
+                  onkeyup="textAreaAdjust(this)"
+                ></textarea>
+                <div class="cross-btnn">
+                  <img
+                    src="https://img.icons8.com/color/24/000000/cancel.png"
+                  />
+                </div>
+                <div class="menu-btn opt-btn">
+                  <img
+                    src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                  />
+                </div>
+              </div>
+              <div class="option-block">
+                <textarea
+                  type="text"
+                  name="input_2"
+                  id="option2"
+                  class="box"
+                  required
+                  placeholder="#option2"
+                  rows="1"
+                  onkeyup="textAreaAdjust(this)"
+                ></textarea>
+                <div class="cross-btnn">
+                  <img
+                    src="https://img.icons8.com/color/24/000000/cancel.png"
+                  />
+                </div>
+                <div class="menu-btn opt-btn">
+                  <img
+                    src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                  />
+                </div>
+              </div>
+              <div class="option-block">
+                <textarea
+                  type="text"
+                  name="input_3"
+                  id="option3"
+                  class="box"
+                  required
+                  placeholder="#option1"
+                  rows="1"
+                  onkeyup="textAreaAdjust(this)"
+                ></textarea>
+                <div class="cross-btnn">
+                  <img
+                    src="https://img.icons8.com/color/24/000000/cancel.png"
+                  />
+                </div>
+                <div class="menu-btn opt-btn">
+                  <img
+                    src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="add-opn">
+              <button class="add-opn-button" type="button">
+                <img
+                  src="https://img.icons8.com/ios-glyphs/26/41006d/plus-math.png"
+                />
+              </button>
+            </div>
+            <div class="sbt-block">
+              <button class="submit-button" type="submit">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

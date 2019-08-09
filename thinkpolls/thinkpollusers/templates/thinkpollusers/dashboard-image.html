@@ -1,0 +1,768 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="fb:app_id" content="668055086954771" />
+  <meta property="og:title" content="" />
+  <meta property="og:site_name" content="Thinkpolls" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thinkpolls.herokuapp.com/" />
+  <meta property="og:description" content="" />
+  <meta name="title" content="" />
+  <meta name="type" content="website" />
+  <meta name="url" content="https://thinkpolls.herokuapp.com/" />
+  <meta name="description" content="" />
+  <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg.jpg" />
+  <meta property="og:image:type" content="image/jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image" content="http://thinkpolls.herokuapp.com/static/thinkpollusers/images/ogimg-small.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="400" />
+  <meta property="og:image:height" content="400" />
+  <meta name="og:locale" content="en_US" />
+  <title>title</title>
+  <link rel="shortcut icon" href="{% static 'poll_detail/images/favicon.svg' %}" />
+
+  <style>
+    body,
+    html {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .header {
+      top: 0px;
+      position: absolute;
+      width: 100%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .header-left {
+      width: 50%;
+    }
+
+    .header-right {
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .logo-block {
+      padding-left: 45px;
+      text-decoration: none;
+      align-self: center;
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      font-family: "Quicksand", sans-serif;
+    }
+
+    .logo-block div {
+      text-decoration: none;
+      padding-left: 10px;
+      color: rgb(22, 22, 22);
+    }
+
+    .username {
+      position: relative;
+      padding: 7px 14px;
+      border-radius: 30px;
+      color: rgb(41, 80, 255);
+      margin-right: 50px;
+      box-sizing: border-box;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      background-color: #e7ebff;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .nav-list {
+      width: 100%;
+      position: absolute;
+      padding: 7px 30px 7px 10px;
+      border-radius: 20px;
+      top: 0px;
+      right: 0px;
+      background-color: #e7ebff;
+      color: #2950ff;
+      display: flex;
+      visibility: hidden;
+      opacity: 0;
+      justify-content: space-evenly;
+      align-items: flex-end;
+      flex-direction: column;
+      transition: 180ms all ease;
+    }
+
+    .nav-list div {
+      padding: 2px 0px;
+      cursor: pointer;
+    }
+
+    .nav-list label {
+      padding: 2px 0px;
+      cursor: pointer;
+    }
+
+    .nav-list a {
+      padding: 2px 0px;
+      text-decoration: none;
+      color: #2950ff;
+    }
+
+    .username:hover .nav-list {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .username svg {
+      fill: rgb(41, 80, 255);
+      padding-left: 2px;
+    }
+
+    .welcome-user-block {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      /*background-color: rgb(243, 243, 243);*/
+      background-color: #fbfbfb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .welcome-user-block .big-text {
+      font-family: "Poppins", sans-serif;
+      font-size: 40px;
+      align-self: flex-start;
+      padding-left: 100px;
+    }
+
+    .welcome-user-block .small-text {
+      font-size: 30px;
+      font-family: "Roboto", sans-serif;
+      align-self: flex-start;
+      padding-left: 100px;
+    }
+
+    .welcome-user-block .dash-nav {
+      position: absolute;
+      width: 100%;
+      bottom: 20px;
+      left: 100px;
+      display: flex;
+    }
+
+    .welcome-user-block .dash-nav a {
+      text-decoration: none;
+      color: rgb(36, 36, 36);
+      padding: 6px 13px;
+      margin-right: 15px;
+      background-color: rgb(224, 224, 224);
+      border-radius: 100px;
+      box-sizing: border-box;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .welcome-user-block .dash-nav a:hover {
+      background-color: rgb(206, 206, 206);
+      color: rgb(0, 0, 0);
+    }
+
+    .poll-exist-status {
+      background-color: #e7ebff;
+      color: #2950ff;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      font-family: "Poppins", sans-serif;
+      font-size: 22px;
+    }
+
+    .poll-exist-status a {
+      margin-top: 17px;
+      text-decoration: none;
+      padding: 7px 17px;
+      background-color: #2950ff;
+      color: aliceblue;
+      border-radius: 50px;
+      font-size: 16px;
+
+    }
+
+    .poll-data-wrapper {
+      position: relative;
+      margin: 30px auto;
+      width: 80%;
+      border: 2px solid rgb(54, 54, 54);
+      height: auto;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* DELETE CSS */
+    .delete-block {
+      position: fixed;
+      top: 0px;
+      width: 100%;
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      background-color: rgb(245, 245, 245);
+      padding: 20px 0px;
+      box-sizing: border-box;
+    }
+
+    #del-close {
+      cursor: pointer;
+      position: absolute;
+      bottom: 10%;
+      right: 5%;
+      background: #d3d3d3;
+      padding: 7px;
+      border-radius: 50%;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #del-close svg {
+      fill: rgb(61, 61, 61);
+    }
+
+    .del-title {
+      font-family: "Roboto", sans-serif;
+      box-sizing: border-box;
+      padding: 13px 0px 13px 0px;
+      font-size: 23px;
+      text-align: center;
+    }
+
+    .del-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .del-content button {
+      cursor: pointer;
+      outline: none;
+      font-family: "Roboto", sans-serif;
+      font-size: 19px;
+      padding: 7px 15px;
+      border-radius: 20px;
+      color: red;
+      border: none;
+      background-color: rgb(255, 216, 216);
+    }
+
+    .del-content button:hover {
+      background-color: rgb(255, 208, 208);
+    }
+
+    .btn-space {
+      width: 30px;
+      background-color: blue;
+    }
+
+    .del {
+      cursor: pointer;
+      border: 2px solid rgb(92, 92, 92);
+    }
+
+    .del:hover {
+      border: 2px solid rgb(255, 85, 79);
+    }
+
+    /*END DELETE CSS */
+    .url-show-poll {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      transform: scale(0);
+      transition: 100ms visibility ease, 100ms opacity ease,
+        300ms transform ease;
+    }
+
+    .url-show-poll svg {
+      fill: rgb(193, 192, 255);
+      background-color: rgb(52, 52, 251);
+      border-radius: 60%;
+    }
+
+    .show-data-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 20px;
+      transition: 260ms transform linear;
+    }
+
+    .show-data-btn svg {
+      fill: rgb(52, 52, 251);
+      padding: 10px;
+      border-radius: 50%;
+      background-color: rgb(193, 192, 255);
+    }
+
+    .question-data-block {
+      font-family: "Poppins", sans-serif;
+      padding: 20px 70px 20px 30px;
+      font-size: 26px;
+      line-height: 36px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .show-data-checker:checked~.img-data-wrapper {
+      display: flex;
+    }
+
+    .show-data-checker:checked~.question-data-block {
+      /*   background-color: rgb(193, 192, 255);*/
+      width: 100%;
+      font-size: 30px;
+      line-height: 37px;
+    }
+
+    .show-data-checker:checked~.show-data-btn {
+      transform: rotate(180deg);
+    }
+
+    .show-data-checker:checked~.url-show-poll {
+      visibility: visible;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .img-data-wrapper {
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .img-vote-wrapper {
+      margin: 10px 0px 10px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .img-vote-wrapper img {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 17px;
+    }
+
+    .vote-bk {
+      position: relative;
+      margin-left: 6%;
+      width: 55%;
+      height: 70px;
+      border-radius: 10px;
+      background-color: #f5f5f5;
+    }
+
+    .vote-width {
+      position: absolute;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      border-radius: 10px;
+      background-color: rgb(152, 153, 235);
+    }
+
+    .vote-value {
+      position: absolute;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      right: 10px;
+      font-family: sans-serif;
+      font-weight: 500;
+      font-size: 21px;
+    }
+
+    .vote-value span {
+      font-size: 16px;
+    }
+
+    .vote-result {
+      position: absolute;
+      top: 100%;
+      right: 15px;
+      font-size: 17px;
+      color: rgb(68, 68, 68);
+      font-family: sans-serif;
+    }
+
+    @media (max-width: 480px) {
+
+
+      /*header*/
+
+      .header-left {
+        width: 40%;
+      }
+
+      .header-right {
+        width: 60%;
+      }
+
+      .logo-block svg {
+        width: 34px;
+        height: 34px;
+      }
+
+      .logo-block div {
+        font-size: 15px;
+        padding-left: 6px;
+      }
+
+      .logo-block {
+        padding-left: 15px;
+      }
+
+      .username {
+        margin-right: 25px;
+        font-size: 16px;
+      }
+
+      .nav-list {
+        font-size: 16px;
+      }
+
+      /*header*/
+
+      .welcome-user-block .big-text {
+        font-size: 30px;
+        align-self: center;
+        padding-left: 0px;
+      }
+
+      .welcome-user-block .small-text {
+        font-size: 20px;
+        align-self: center;
+        text-align: center;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .welcome-user-block .dash-nav {
+        display: flex;
+        justify-content: space-evenly;
+        left: 0px;
+        font-size: 13px;
+      }
+
+      .welcome-user-block .dash-nav a {
+        padding: 4px 7px;
+        margin-right: 0px;
+      }
+
+      .poll-data-wrapper {
+        width: 90%;
+        margin: 23px auto;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid rgb(54, 54, 54);
+      }
+
+      .url-show-poll svg {
+        width: 35px;
+        height: 35px;
+      }
+
+      .show-data-btn {
+        bottom: 2px;
+        right: 20px;
+      }
+
+      .show-data-btn svg {
+        width: 15px;
+        height: 15px;
+        padding: 10px;
+      }
+
+      .question-data-block {
+        padding: 10px 55px 10px 15px;
+        font-size: 20px;
+        line-height: 27px;
+      }
+
+      .show-data-checker:checked~.question-data-block {
+        /*   background-color: rgb(193, 192, 255);*/
+        width: 100%;
+        font-size: 23px;
+        line-height: 30px;
+      }
+
+      .img-data-wrapper {
+        padding: 20px 10px;
+      }
+
+      .img-vote-wrapper {
+        flex-direction: column;
+        margin: 10px 0px 30px 0px;
+      }
+
+      .img-vote-wrapper img {
+        width: 200px;
+        height: 145px;
+      }
+
+      .vote-bk {
+        width: 200px;
+        margin-top: 15px;
+        margin-left: 0%;
+        border-radius: 6px;
+        height: 40px;
+      }
+
+      .vote-result {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="delete-block" id="delete-block">
+      <form action="" method="post" style="display: none" id="del-form">
+        {% csrf_token %}
+        <input type="text" name="del_list" value="" id="del_list" />
+      </form>
+      <div class="del-title">select the polls you want to delete</div>
+      <div class="del-content">
+        <button type="button" id="delete-sbt">delete</button>
+        <div class="btn-space"></div>
+        <button type="button" id="all-delete-sbt">delete all</button>
+        <div id="del-close">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24">
+            <path
+              d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="header">
+      <div class="header-left">
+        <a href="{% url 'thinkpolls_index' %}" class="logo-block">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40px">
+            <title>thinkpolls-homepage</title>
+            <path class="cls-1"
+              d="M36.83,1H11.17A10.17,10.17,0,0,0,1,11.17V36.83A10.17,10.17,0,0,0,11.17,47H36.83A10.17,10.17,0,0,0,47,36.83V11.17A10.17,10.17,0,0,0,36.83,1ZM30.18,8.13l4,3.93,3.94-4,1.77,1.77-3.93,4,4,3.93-1.77,1.77-4-3.93-4,4-1.75-1.76,3.93-4-4-3.95ZM13.51,41.9a1.78,1.78,0,1,1,1.77-1.77A1.77,1.77,0,0,1,13.51,41.9Zm2.58-7.84a3.67,3.67,0,0,0-1.26,3.21H12.11c0-2.17-.07-3,1.94-4.95.78-.74,1.39-1.32,1.3-2.47a1.78,1.78,0,0,0-1.84-1.66c-1.46,0-2.08,1.3-2.08,2.89H8.71c0-3.65,2.08-5.51,4.85-5.51s4.64,1.68,4.61,4.4A6,6,0,0,1,16.09,34.06ZM13.38,19.58a5.31,5.31,0,1,1,5.31-5.31A5.3,5.3,0,0,1,13.38,19.58ZM31.67,41.84l-5.48-5.32,2.26-2.26,3.22,3,6.87-7,2.27,2.26Z" />
+          </svg>
+          <div>Thinkpolls</div>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="username">
+          {{ username |truncatechars:12 }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
+            <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+          </svg>
+
+          <div class="nav-list">
+            <div> {{ username |truncatechars:12 }}</div>
+            <a href="{% url 'thinkpolls_page' %}">create poll</a>
+            <a href="{% url 'imagepoll' %}"> img poll</a>
+            <label id="deletepoll" for="delete-btn">delete poll
+              <input type="checkbox" id="delete-btn" style="display: none" />
+            </label>
+            <div id="log-out">
+              log out
+              <form method="post" id="log-form" style="display: none">
+                {% csrf_token %}
+                <input type="hidden" name="log-value" value="log-out" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="welcome-user-block">
+      <div class="big-text">Hello {{ username }}!</div>
+      <div class="small-text">
+        is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum h
+      </div>
+      <div class="dash-nav">
+        <a href="{% url 'thinkpoll-dashboard' %}">view polls</a>
+        <a href="{% url 'thinkpolls_page' %}">create poll</a>
+        <a href="{% url 'imagepoll' %}">create image poll</a>
+      </div>
+    </div>
+
+
+    {% if  poll_data %}
+    {% else %}
+    <div class="poll-exist-status">
+      <div>
+        No polls created yet
+      </div>
+      <a href="{% url 'thinkpolls_page' %}"">make a poll</a>
+    </div>
+    {% endif %}
+    <!---->
+    {% for poll in poll_data %}
+    <div class=" poll-data-wrapper" data="{{ poll.poll_url }}" onclick="del_fun(this)">
+        <input type="checkbox" class="show-data-checker" id="showcheck{{ forloop.counter }}" style="display: none" />
+        <label for="showcheck{{ forloop.counter }}" class="show-data-btn" onclick="show_data(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+          </svg>
+        </label>
+        <input type="checkbox" style="display: none" />
+        <a class="url-show-poll" href="http://127.0.0.1:8000/{{ poll.poll_url }}" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24">
+            <path
+              d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 15.889v-2.223s-3.78-.114-7 3.333c1.513-6.587 7-7.778 7-7.778v-2.221l5 4.425-5 4.464z" />
+          </svg>
+        </a>
+        <div class="question-data-block">
+          {{ poll.question }}
+        </div>
+        <div class="img-data-wrapper"></div>
+    </div>
+    {% endfor %}
+    <!---->
+  </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Quicksand:700', 'Poppins:600', 'Roboto:500']
+    }
+  });
+</script>
+<script src="{%  static 'thinkpollusers/imgdashboard.js' %}"></script>
+
+<script>
+  let del_poll_url_list = "";
+
+  document.getElementById("deletepoll").onclick = function () {
+    show_delete_block();
+    dropdown_checkbox = document.getElementsByClassName("show-data-checker");
+    poll_wrapper = document.getElementsByClassName("poll-data-wrapper");
+    for (i = 0; i < poll_wrapper.length; i++) {
+      poll_wrapper[i].classList.add("del");
+    }
+
+    for (i = 0; i < dropdown_checkbox.length; i++) {
+      dropdown_checkbox[i].checked = false;
+    }
+  };
+
+  function del_fun(o) {
+    del_ckr = document.getElementById("delete-btn").checked;
+    //intial checker
+
+    if (del_ckr == true) {
+      console.log(o);
+      console.log(o.getAttribute("data"));
+      o.style.borderColor = "rgb(255, 85, 79)";
+      if (del_poll_url_list == "") {
+        del_poll_url_list = "-" + o.getAttribute("data");
+      } else {
+        if (del_poll_url_list.includes(o.getAttribute("data"))) {
+          o.style.borderColor = "rgb(92, 92, 92)";
+          del_poll_url_list = del_poll_url_list.replace(
+            "-" + o.getAttribute("data"),
+            ""
+          );
+        } else {
+          del_poll_url_list =
+            del_poll_url_list + "-" + o.getAttribute("data");
+        }
+      }
+      console.log(del_poll_url_list);
+    } else {
+      console.log("NOT DELETE MODE");
+    }
+  }
+
+  function show_delete_block() {
+    del_ckr = document.getElementById("delete-btn").checked;
+    if (del_ckr) {
+      document.getElementById("delete-block").style.display = "flex";
+    } else {
+      document.getElementById("delete-block").style.display = "none";
+    }
+  }
+
+  document.getElementById("delete-sbt").onclick = function () {
+    if (del_poll_url_list.length < 3) {
+      alert("please select a poll");
+    } else {
+      console.log(del_poll_url_list);
+      document.getElementById("del_list").value = del_poll_url_list;
+      document.getElementById("del-form").submit();
+    }
+  };
+  document.getElementById("del-close").onclick = function () {
+    document.getElementById("delete-btn").checked = false;
+    poll_wrapper = document.getElementsByClassName("poll-data-wrapper");
+    for (i = 0; i < poll_wrapper.length; i++) {
+      poll_wrapper[i].classList.remove("del");
+    }
+    show_delete_block();
+  };
+  document.getElementById("all-delete-sbt").onclick = function () {
+    var del_poll_url_list;
+    poll_wrapper = document.getElementsByClassName("poll-data-wrapper");
+    for (i = 0; i < poll_wrapper.length; i++) {
+      del_poll_url_list =
+        del_poll_url_list + "-" + poll_wrapper[i].getAttribute("data");
+    }
+
+    console.log(del_poll_url_list);
+    document.getElementById("del_list").value = del_poll_url_list;
+    document.getElementById("del-form").submit();
+  };
+
+  ///LOG OUT
+
+  document.getElementById("log-out").onclick = function () {
+    document.getElementById("log-form").submit();
+  };
+</script>
+
+
+
+</html>

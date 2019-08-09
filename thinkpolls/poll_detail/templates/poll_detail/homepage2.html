@@ -1,0 +1,881 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Thinkpolls</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="{% static 'poll_detail/images/favicon.png' %}"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="{% static 'poll_detail/thinkpolls.js' %}"></script>
+    <style>
+      body,
+      html {
+        padding: 0px;
+        margin: 0px;
+      }
+      :root {
+        --main-bg-color: rgb(250, 250, 250);
+        --sec1-bg-color: #fcfcfc;
+        --q-color: rgb(22, 22, 22);
+        --border: 1.8px solid #6d6d6d;
+      }
+      .wrapper {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        background-color: rgba(241, 242, 243, 0);
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+      }
+      .header .head-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        font-family: "Roboto", sans-serif;
+      }
+      .head-nav a {
+        padding: 7px 13px;
+        text-decoration: none;
+        color: rgb(31, 31, 31);
+        font-size: 16px;
+        border-radius: 5px;
+      }
+      .head-nav a:hover {
+        font-size: 16px;
+        background-color: rgb(240, 240, 240);
+        color: rgb(12, 12, 12);
+      }
+      #signup_button {
+        background-color: rgb(27, 27, 27);
+        color: rgb(251, 251, 251);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo img {
+      }
+      .logo-name {
+        font-size: 22.5px;
+        color: white;
+        padding-left: 10px;
+        font-family: "Quicksand", sans-serif;
+      }
+      .header-grid-section {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        grid-template-rows: auto;
+      }
+      .header-intro-section {
+        /* background-color: rgb(248, 77, 114);*/
+        background-color: rgb(11, 105, 255);
+        color: whitesmoke;
+        font-size: 42px;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 10%;
+      }
+      .header-createpoll-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .header-createpoll-section .newtab {
+        text-decoration: none;
+        background-color: #f1f1f1;
+        color: rgb(3, 39, 241);
+        padding: 5px 10px;
+        font-size: 14px;
+        margin-top: 120px;
+        font-family: "Poppins", sans-serif;
+        border-radius: 10px;
+      }
+      .header-createpoll-section .newtab:hover {
+        background-color: #e9fbff;
+      }
+      /* START POLL CREATE*/
+      .poll-block {
+        margin: 30px 0px 100px 0px;
+        max-width: 650px;
+        width: 80%;
+        background-color: rgb(251, 251, 251);
+        border-radius: 24px;
+        border: 1.8px solid #6d6d6d;
+        overflow: hidden;
+      }
+      .poll-block form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .question-block {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 25px 25px;
+        box-sizing: border-box;
+        background-color: var(--main-bg-color);
+        z-index: 100;
+      }
+      .select-color-box {
+        position: absolute;
+        top: 100%;
+        right: 80px;
+        width: 29px;
+        height: 29px;
+        border-radius: 50%;
+        transform: translateY(-50%);
+        background-color: #1726fd;
+        border: 5px solid white;
+        cursor: pointer;
+      }
+
+      .select-color-box:hover > .color-select-block {
+        visibility: visible;
+        opacity: 1;
+        width: auto;
+        height: auto;
+      }
+
+      .color-select-block {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: auto;
+        transition: 150ms all ease;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-gap: 7px 4px;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: rgb(250, 250, 250);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      .circle {
+        width: 29px;
+        height: 29px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      #blue {
+        background-color: #3948f2;
+      }
+      #red {
+        background-color: #f64747;
+      }
+      #orange {
+        background-color: #f15a22;
+      }
+      #green {
+        background-color: #00b16a;
+      }
+      #yellow {
+        background-color: #f7ca18;
+      }
+      #purple {
+        background-color: #8c14fc;
+      }
+      #black {
+        background-color: #2e3131; /*,#4361e9;,#fadcff,#f68c66,#fdc3bc,#ff8282,#6fd385,#85ce94,#bd8fff,#fcff50;*/
+      }
+      #default {
+        background-color: #d4d4d4;
+      }
+      .question-block textarea {
+        border: none;
+        resize: none;
+        height: auto;
+        width: 100%;
+        color: var(--q-color);
+        font-size: 28px;
+        line-height: 35px;
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+        outline: none;
+        background-color: var(--main-bg-color);
+      }
+
+      .question-block textarea::placeholder {
+        color: rgb(146, 146, 146);
+      }
+      .option-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+        z-index: 0;
+      }
+      textarea {
+        resize: none;
+      }
+      .option-block {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+      .box {
+        border: none;
+        position: relative;
+        background-color: var(--sec1-bg-color);
+        border: var(--border);
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 16px 16px;
+        margin-top: 25px;
+        font-size: 20px;
+        outline: none;
+        width: 80%;
+        font-family: "Poppins", sans-serif;
+      }
+      .box::placeholder {
+        color: rgb(138, 138, 138);
+      }
+      #option1 {
+        margin-top: 45px;
+      }
+      .cross-btnn {
+        /* visibility: visible;
+              opacity: 1;*/
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        right: 14.5%;
+        transform: translate(30%, -20%);
+        transition: 150ms all ease-in-out;
+      }
+      .menu-btn {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        left: 100%;
+        transform: translate(-130%, -90%) scale(0.1, 0.1);
+        transition: 150ms all ease-in-out;
+      }
+
+      .sbt-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+      }
+      .sbt-block button {
+        outline: none;
+        cursor: pointer;
+        font-family: "Roboto", sans-serif;
+        font-size: 21px;
+        border: var(--border);
+        border-radius: 7px;
+        padding: 9px 16px;
+        background-color: var(--main-bg-color);
+        color: var(--q-color);
+        margin: 25px 0px;
+      }
+      /* END OF POLL CREATE */
+
+      .pros-section {
+        width: 72%;
+        display: grid;
+        margin: 40px auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+      .pros-section .pros-block {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background-color: rgb(251, 251, 251);
+        flex-direction: column;
+        padding: 10px;
+      }
+      .pros-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .pros-title {
+        padding: 7px 0px;
+        font-size: 24px;
+        color: #2c2c2c;
+        font-family: "Poppins", sans-serif;
+      }
+      .pros-text {
+        padding: 7px 60px 7px 0px;
+        font-size: 16px;
+        color: #5d5d5d;
+        font-family: "Roboto", sans-serif;
+      }
+      .apps-grid-wrapper {
+        margin: 30px 0px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #2f32fa;
+        padding: 60px 10px;
+        box-sizing: border-box;
+      }
+      .apps-grid {
+        display: grid;
+        width: 90%;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .content-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .content-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 58px;
+        padding: 30px 0px;
+        color: #ffffff;
+      }
+      .content-text {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        padding: 10px 50px 10px 0px;
+        color: #d1d1d1;
+      }
+      .content-img {
+        padding: 30px 0px;
+        background: url("https://images.unsplash.com/photo-1479920252409-6e3d8e8d4866?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover;
+      }
+      .footer-above {
+        width: 100%;
+        height: 180px;
+        background-color: rgb(11, 105, 255);
+      }
+      .footer {
+        width: 100%;
+        height: 350px;
+        background-color: #1a1a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .footer-grid {
+        width: 90%;
+        height: 70%;
+        display: grid;
+        grid-template-columns: 1fr 0.5fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        grid-gap: 20px;
+      }
+
+      .footer-grid .footer-logo-block {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 13px;
+      }
+      .footer-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .footer-section a {
+        text-decoration: none;
+        font-family: "Roboto", sans-serif;
+        font-size: 17px;
+        color: rgb(153, 153, 153);
+        padding: 12px;
+      }
+      .footer-section a:hover {
+        color: rgb(228, 228, 228);
+      }
+      @media (max-width: 480px) {
+        .header-grid-section {
+          width: 100%;
+          display: grid;
+          grid-template-rows: 400px auto;
+          grid-template-columns: 100%;
+        }
+        .header-intro-section {
+          font-size: 28px;
+          line-height: 34px;
+        }
+        .header .head-nav {
+          display: none;
+        }
+        .header {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+        .poll-block {
+          margin: 50px 0px;
+        }
+        .pros-section {
+          width: 100%;
+          display: grid;
+          margin: 0px auto;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
+        }
+        .pros-text {
+          padding: 7px 10px;
+        }
+        .pros-title {
+          padding: 7px 0px;
+          font-size: 18px;
+          color: #2c2c2c;
+          font-family: "Poppins", sans-serif;
+        }
+        .footer {
+          height: 550px;
+        }
+        .footer-grid {
+          width: 95%;
+          height: 80%;
+          display: grid;
+          grid-template-rows: 1fr 30px 1fr 1fr;
+          grid-template-columns: 1fr;
+          grid-gap: 5px;
+        }
+        .footer-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .footer-section a {
+          text-decoration: none;
+          font-family: "Poppins", sans-serif;
+          font-size: 17px;
+          color: rgb(153, 153, 153);
+          padding: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="logo">
+          <img src="{% static 'poll_detail/images/logo.png' %}" alt="" />
+          <div class="logo-name">Thinkpolls</div>
+        </div>
+        <div class="head-nav">
+          <a href="{% url 'imagepoll' %}">image poll</a>
+          <a href="#">yes or no poll</a>
+          <a href="#">blog</a>
+          <a href="{% url 'thinkpoll-login' %}">login</a>
+          <a href="{% url 'thinkpoll-signup' %}" id="signup_button">signup</a>
+        </div>
+      </div>
+      <div class="header-grid-section">
+        <div class="header-intro-section">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ips
+        </div>
+        <div class="header-createpoll-section">
+          <a href="{% url 'thinkpolls_page' %}" class="newtab"
+            >#create poll in newtab</a
+          >
+          <div class="poll-block">
+            <form action="" method="post" id="poll-form">
+              {% csrf_token %}
+              <div class="question-block">
+                <textarea
+                  name="input_0"
+                  placeholder="what your question?"
+                  onkeyup="textAreaAdjust(this)"
+                  rows="1"
+                ></textarea>
+                <input
+                  name="color"
+                  value="default"
+                  id="themecolor"
+                  type="hidden"
+                />
+                <div class="select-color-box">
+                  <div class="color-select-block">
+                    <div class="circle" id="blue"></div>
+                    <div class="circle" id="red"></div>
+                    <div class="circle" id="orange"></div>
+                    <div class="circle" id="green"></div>
+                    <div class="circle" id="yellow"></div>
+                    <div class="circle" id="purple"></div>
+                    <div class="circle" id="black"></div>
+                    <div class="circle" id="default"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="option-wrapper">
+                <div class="option-block">
+                  <textarea
+                    type="text"
+                    name="input_1"
+                    id="option1"
+                    class="box"
+                    required
+                    placeholder="#option1"
+                    rows="1"
+                    onkeyup="textAreaAdjust(this)"
+                  ></textarea>
+                  <div class="cross-btnn">
+                    <img
+                      src="https://img.icons8.com/color/24/000000/cancel.png"
+                    />
+                  </div>
+                  <div class="menu-btn opt-btn">
+                    <img
+                      src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                    />
+                  </div>
+                </div>
+                <div class="option-block">
+                  <textarea
+                    type="text"
+                    name="input_2"
+                    id="lastoption"
+                    class="box"
+                    required
+                    placeholder="#option2"
+                    rows="1"
+                    onkeyup="textAreaAdjust(this)"
+                  ></textarea>
+                  <div class="cross-btnn">
+                    <img
+                      src="https://img.icons8.com/color/24/000000/cancel.png"
+                    />
+                  </div>
+                  <div class="menu-btn opt-btn">
+                    <img
+                      src="https://img.icons8.com/material-outlined/24/000000/more.png"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="sbt-block">
+                <button class="submit-button" type="button">create poll</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-section">
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2013/240/iconmonstr-code-2.png"
+              alt=""
+              style="width: 30px"
+            />
+          </div>
+          <div class="pros-title">Embed</div>
+          <div class="pros-text">
+            Add polls to your website with a click interact more with your
+            customers and collect data from anywhere.
+          </div>
+        </div>
+
+        <div class="pros-block">
+          <div class="pros-icon"></div>
+          <div class="pros-title">Speak your Brand</div>
+          <div class="pros-text">
+            User-friendly and highly responsive for all the platforms out there.
+          </div>
+        </div>
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-chart-13.png"
+              alt=""
+              style="width: 30px"
+            />
+          </div>
+          <div class="pros-title">Realtime results</div>
+          <div class="pros-text">
+            Accurate results without a delay.
+          </div>
+        </div>
+
+        <div class="pros-block">
+          <div class="pros-icon">
+            <img
+              src="https://cdns.iconmonstr.com/wp-content/assets/preview/2012/96/iconmonstr-time-13.png"
+              alt=""
+              style="width: 33px"
+            />
+          </div>
+          <div class="pros-title">Polls in sec</div>
+          <div class="pros-text">
+            Create instant polls with a few clicks made with django
+          </div>
+        </div>
+      </div>
+      <div class="apps-grid-wrapper">
+        <div class="apps-grid">
+          <div class="content-section">
+            <div class="content-title">Lorem Ipsum</div>
+            <div class="content-text">
+              has been the industry's standard dummy text ever since the 1500s,
+              when an unknown printer took a galley of type and scrambled it to
+              make a type specimen book. It has survived not only five
+              centuries, but also the leap into electronic typesetting,
+              remaining essentially unchanged. It was popularised in the 1960s
+              with the release of Letraset sheets containing Lorem Ipsum
+              passages, and more recently with desktop publishing software like
+              Aldus PageMaker including versions of Lorem Ipsu
+            </div>
+          </div>
+          <div class="content-img"></div>
+        </div>
+      </div>
+      <div class="footer-above"></div>
+      <div class="footer">
+        <div class="footer-grid">
+          <div class="footer-logo-block">
+            <img
+              src="{% static 'poll_detail/images/logo-medium.png' %}"
+              alt=""
+            />
+            <div class="logo-name" style="font-size: 25px">Thinkpolls</div>
+          </div>
+          <div></div>
+
+          <div class="footer-section">
+            <a href="">Blog</a>
+            <a href="">Faq</a>
+            <a href="">How to Guide</a>
+            <a href="">Embed</a>
+          </div>
+          <div class="footer-section">
+            <a href="">About</a>
+            <a href="">Contact</a>
+            <a href="">Privacy policy</a>
+            <a href="">Terms and conditions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function() {
+      $(".submit-button").click(function() {
+        input_block = document.getElementsByClassName("box");
+        var flag;
+        var option_index = input_block.length;
+        for (j = 0; j < input_block.length; j++) {
+          option_value = input_block[j].value;
+
+          for (i = j + 1; i < input_block.length; i++) {
+            next_option = input_block[i].value;
+            if (option_value == next_option) {
+              console.log("same");
+              flag = true;
+              break;
+            } else {
+              continue;
+            }
+          }
+        }
+        if (flag) {
+          console.log("same");
+          alert("same options");
+        } else {
+          input_question = $("textarea[name=input_0]");
+
+          if (input_question.val() == "") {
+            console.log(input_question.val());
+            alert("question cant be empty");
+          } else {
+            $("#poll-form").submit();
+          }
+        }
+      });
+
+      $(".circle").click(function() {
+        if (this.id == "blue") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#3948f2"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#e4f1fe"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $(".select-color-box").css({
+            backgroundColor: "#1726fd"
+          });
+
+          $("#themecolor").val("blue");
+        } else if (this.id == "red") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#f64747"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#FFE8E8"
+            //"#FDE4EB"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $(".select-color-box").css({
+            backgroundColor: "#f64747"
+          });
+          $("#themecolor").val("red");
+        } else if (this.id == "orange") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#f15a22"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#fde3a7"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $(".select-color-box").css({
+            backgroundColor: "#f15a22"
+          });
+          $("#themecolor").val("orange");
+        } else if (this.id == "green") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#00b16a"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#c8f7c5"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $("   .select-color-box").css({
+            backgroundColor: "#00b16a"
+          });
+          $("#themecolor").val("green");
+        } else if (this.id == "yellow") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#f7ca18"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#ffffcc"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "black");
+          $(".select-color-box").css({
+            backgroundColor: "#f7ca18"
+          });
+          $("#themecolor").val("yellow");
+        } else if (this.id == "purple") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#8c14fc"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#fadcff"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $(".select-color-box").css({
+            backgroundColor: "#8c14fc"
+          });
+          $("#themecolor").val("purple");
+        } else if (this.id == "black") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#2e3131"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#dadfe1"
+          );
+          document.documentElement.style.setProperty("--border", "none");
+          document.documentElement.style.setProperty("--q-color", "white");
+
+          $(".select-color-box").css({
+            backgroundColor: "#2e3131"
+          });
+
+          $("#themecolor").val("black");
+        } else if (this.id == "default") {
+          document.documentElement.style.setProperty(
+            "--main-bg-color",
+            "#FAFAFA"
+          );
+          document.documentElement.style.setProperty(
+            "--sec1-bg-color",
+            "#fcfcfc"
+          );
+          document.documentElement.style.setProperty(
+            "--border",
+            "1.8px solid #6d6d6d"
+          );
+          document.documentElement.style.setProperty("--q-color", "black");
+
+          $(".select-color-box").css({
+            backgroundColor: "#d4d4d4"
+          });
+
+          $("#themecolor").val("default");
+        }
+      });
+    });
+  </script>
+</html>
